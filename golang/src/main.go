@@ -17,21 +17,23 @@ func open(path string, count uint) (*sql.DB, error) {
 	}
 
 	if err = db.Ping(); err != nil {
-		time.Sleep(time.Second * 2)
+		time.Sleep(time.Second * 1)
 		count--
 		fmt.Printf("retry... count:%v\n", count)
-		if (count > 0) {
+		if count > 0 {
 			return open(path, count)
 		} else {
 			return nil, err
 		}
 	}
+
 	return db, nil
 }
 
 func connectDB() (*sql.DB, error) {
-	var path string = fmt.Sprintf("%s:%s@tcp(db:3306)/%s?charset=utf8&parseTime=true",
-		os.Getenv("MYSQL_USER"), 
+	var path string = fmt.Sprintf(
+		"%s:%s@tcp(db:3306)/%s?charset=utf8&parseTime=true",
+		os.Getenv("MYSQL_USER"),
 		os.Getenv("MYSQL_PASSWORD"),
 		os.Getenv("MYSQL_DATABASE"))
 
@@ -42,11 +44,10 @@ func main() {
 	db, err := connectDB()
 	if err != nil {
 		fmt.Println(err)
-	} else {
 		return
-	} 
+	}
 	defer db.Close()
-	
-	fmt.Println("mysql Connected!")
+
+	fmt.Println("db connected!!")
 	article.ReadAll(db)
 }
