@@ -37,8 +37,6 @@ services:
       - type: bind
         source: ./mysql/init
         target: /docker-entrypoint-initdb.d
-    networks:
-      - golang_test_network
 
 volumes:
   mysql_test_volume:
