@@ -14,11 +14,9 @@ services:
     depends_on:
       - db
     volumes:
-      - type: bind
-        source: ./golang/src
-        target: /go/src
-    networks:
-      - golang_test_network
+      - ./golang:/app
+    working_dir: /app
+    command: go run src/main.go
 
   db:
     command: mysqld --innodb_use_native_aio=0
@@ -45,7 +43,3 @@ services:
 volumes:
   mysql_test_volume:
     name: mysql_test_volume
-
-networks:
-  golang_test_network:
-    external: true
